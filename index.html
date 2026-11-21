@@ -167,7 +167,7 @@ function Envelope({onDone}){
   </motion.div>`;
 }
 
-/* ---------- Scene 3 & 4: Invitation + RSVP ---------- */
+/* ---------- Scene 3 & 4: Invitation + Message ---------- */
 const fade = (d=0)=>({initial:{opacity:0,y:30},whileInView:{opacity:1,y:0},viewport:{once:true,amount:.4},transition:{duration:1.1,delay:d}});
 function Bow(){
   return html`<svg width="150" viewBox="0 0 120 56"><path d="M60 28C40 2 8 4 10 24c2 22 36 12 50 4ZM60 28C80 2 112 4 110 24c-2 22-36 12-50 4Z" fill="#dcdfe9" stroke="#aeb2c4" stroke-width="1.5"/><path d="M60 28L44 54M60 28L76 54" stroke="#c4c8d8" stroke-width="6" stroke-linecap="round"/><circle cx="60" cy="28" r="7" fill="#f3ecf3" stroke="#aeb2c4"/></svg>`;
@@ -180,21 +180,7 @@ const ICONS={
 function Detail({icon,label,value,d}){
   return html`<motion.div ...${fade(d)} className="flex items-center gap-4 py-2"><span style=${{width:34,color:'#6d6a86',display:'flex',justifyContent:'center'}}>${ICONS[icon]}</span><div><p className="serif" style=${{fontSize:'1.1rem',color:'#3a3855',lineHeight:1.25}}>${label}</p><p className="serif" style=${{fontSize:'1.1rem',color:'#6d6a86',lineHeight:1.25}} dir="auto">${value}</p></div></motion.div>`;
 }
-const REPLIES = {
-  yes:{t:'Yay! See you there ♡',s:'Your presence means the world to me. Cannot wait to celebrate together!'},
-  maybe:{t:'I’ll keep a place for you',s:'Let me know when the stars align — a seat by the lake awaits.'},
-  no:{t:'You’ll be missed dearly',s:'Thank you for the love anyway. We’ll celebrate soon, I promise ♡'}
-};
 function Invite({onReplay}){
-  const [choice,setChoice] = useState(null);
-  const [hearts,setHearts] = useState([]);
-  const pick = (k)=>{
-    setChoice(k);
-    const sym = k==='no'?['✧','·']:['♡','✦','♥'];
-    const base = Date.now();
-    setHearts(h=>[...h,...[...Array(k==='no'?10:22)].map((_,i)=>({id:base+i,x:rnd(-45,45),dx:rnd(-90,90),s:rnd(16,34),c:sym[i%sym.length],d:rnd(0,.5)}))]);
-    setTimeout(()=>setHearts([]),3500);
-  };
   return html`<motion.div className="absolute inset-0" initial=${{opacity:0}} animate=${{opacity:1}} transition=${{duration:1.4}}>
     <${Background} blur=${true}/>
     <div className="absolute inset-0 overflow-y-auto overflow-x-hidden" style=${{scrollSnapType:'y proximity',scrollBehavior:'smooth'}}>
@@ -213,29 +199,20 @@ function Invite({onReplay}){
             <${Detail} icon="pin" label="Location" value=${CONFIG.venue} d=${.5}/>
           </div>
           <p className="serif mt-6" style=${{fontSize:'1.05rem',color:'#4a4863'}}>Your presence means<br/>the world to me ♡</p>
-          <motion.p className="serif mt-5" style=${{letterSpacing:'.3em',fontSize:'.62rem',color:'#8a87a3'}} animate=${{y:[0,6,0]}} transition=${{repeat:Infinity,duration:2.2}}>RSVP ↓</motion.p>
+          <motion.p className="serif mt-5" style=${{letterSpacing:'.3em',fontSize:'.62rem',color:'#8a87a3'}} animate=${{y:[0,6,0]}} transition=${{repeat:Infinity,duration:2.2}}>ادامه ↓</motion.p>
         </motion.div>
       </section>
 
       <section className="min-h-full flex flex-col items-center justify-center px-5 py-16 gap-8" style=${{scrollSnapAlign:'center'}}>
-        <div className="paper relative text-center rounded-3xl px-7 py-10" style=${{width:'min(92vw,400px)'}}>
-          <motion.h3 ...${fade()} className="script" style=${{fontSize:'2.8rem',position:'relative',zIndex:1}}>Will you be there?</motion.h3>
-          <p style=${{color:'#c1a46b'}}>♥</p>
-          <motion.div ...${fade(.2)} className="flex flex-col gap-3 mt-5" style=${{position:'relative',zIndex:1}}>
-            <button className="btn btn-dark" style=${{opacity:choice&&choice!=='yes'?.55:1}} onClick=${()=>pick('yes')}>Yes, I’ll be there ♡</button>
-            <button className="btn btn-ghost" style=${{opacity:choice&&choice!=='maybe'?.55:1}} onClick=${()=>pick('maybe')}>Maybe</button>
-            <button className="btn btn-ghost" style=${{opacity:choice&&choice!=='no'?.55:1}} onClick=${()=>pick('no')}>Unfortunately, I can’t</button>
+        <div className="paper frame relative text-center rounded-3xl px-7 py-10" style=${{width:'min(92vw,430px)'}}>
+          <motion.div ...${fade()} dir="rtl" lang="fa" style=${{fontFamily:'Vazirmatn,sans-serif',fontSize:'clamp(1rem,4vw,1.15rem)',lineHeight:2,color:'#3a3855'}}>
+            <p>خوشحال می‌شم شما با حضورتون کنارم باشید و این روز قشنگ رو در کنار هم با کلی خاطره خوب جشن بگیریم.</p>
+            <p className="mt-3">منتظر دیدارتونم 🤍🎶</p>
+            <p className="mt-3">اگه پیشنهادی برای آهنگ دارید، می‌تونید به آیدی زیر برام بفرستید:</p>
+            <a className="mt-2 inline-block" href="https://t.me/Rojin0_1" target="_blank" rel="noopener noreferrer" dir="ltr" style=${{color:'#c04a70',fontWeight:600}}>@Rojin0_1</a>
           </motion.div>
-          <${AnimatePresence} mode="wait">${choice&&html`<motion.div key=${choice} className="mt-7" style=${{position:'relative',zIndex:1}} initial=${{opacity:0,scale:.8,y:10}} animate=${{opacity:1,scale:1,y:0}} exit=${{opacity:0}} transition=${{type:'spring',stiffness:140,damping:14}}>
-            <p className="script" style=${{fontSize:'2rem',color:'#34324d'}}>${REPLIES[choice].t}</p>
-            <p className="serif italic" style=${{fontSize:'1.05rem'}}>${REPLIES[choice].s}</p>
-          </motion.div>`}<//>
-          <div className="absolute left-1/2 pointer-events-none" style=${{top:'46%',zIndex:0}}>
-            ${hearts.map(h=>html`<motion.span key=${h.id} className="absolute" style=${{left:h.x,fontSize:h.s,color:'#e9b8cb',textShadow:'0 0 12px #fff'}} initial=${{y:0,opacity:1,scale:.5}} animate=${{y:-300,x:h.dx,opacity:[1,.8,0],scale:1.2}} transition=${{duration:2.6,delay:h.d,ease:'easeOut'}}>${h.c}</motion.span>`)}
-          </div>
         </div>
         <button className="btn btn-main" onClick=${onReplay}>↻ Replay animation</button>
-        <p className="serif italic glow" style=${{opacity:.85}}>Your presence means the world to me ♡</p>
       </section>
     </div>
   </motion.div>`;
