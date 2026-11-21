@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Birthday · You’re Invited</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Great+Vibes&family=Vazirmatn:wght@300;400&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/framer-motion@10.16.4/dist/framer-motion.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<style>
+:root{--pearl:#f6f1ea;--silver:#c9ccd6;--gold:#d9bf8c;--lav:#b9a7d6;--night:#0f1230}
+html,body,#root{height:100%;margin:0;background:var(--night);color:var(--pearl);overflow:hidden;-webkit-tap-highlight-color:transparent}
+.script{font-family:'Great Vibes',cursive}
+.serif{font-family:'Cormorant Garamond','Vazirmatn',Georgia,serif}
+.glow{text-shadow:0 0 18px rgba(246,241,234,.55),0 0 40px rgba(185,167,214,.4)}
+.sky{background:radial-gradient(ellipse at 70% 30%,rgba(217,191,140,.35),transparent 55%),linear-gradient(180deg,#171a3d 0%,#3a3558 38%,#8f7f9f 58%,#c9a9a0 62%)}
+.lake{background:linear-gradient(180deg,#8d8196 0%,#4b4a6e 25%,#1a1d43 100%)}
+.sunpath{background:linear-gradient(180deg,rgba(255,236,200,.7),rgba(255,236,200,0));filter:blur(6px);animation:shim 3s ease-in-out infinite}
+.pearl{border-radius:50%;background:radial-gradient(circle at 30% 30%,#fff,#efe7e1 45%,#b9b3bd 100%);box-shadow:0 0 10px rgba(255,255,255,.5)}
+.btn{position:relative;padding:.9rem 2rem;border-radius:999px;letter-spacing:.22em;font-size:.78rem;text-transform:uppercase;cursor:pointer;transition:all .35s;border:1px solid rgba(255,255,255,.5)}
+.btn-main{background:linear-gradient(135deg,#faf6f0,#e3dde6);color:#2b2a45;box-shadow:0 0 28px rgba(246,241,234,.55),0 0 60px rgba(185,167,214,.35)}
+.btn-main:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 0 40px rgba(255,255,255,.85),0 0 90px rgba(185,167,214,.6)}
+.btn-ghost{background:transparent;color:#4a4863;border-color:#8a87a3}
+.btn-ghost:hover{background:rgba(74,72,99,.08);transform:translateY(-2px)}
+.btn-dark{background:#4a4863;color:#fff;border-color:#4a4863}
+.btn-dark:hover{background:#34324d;transform:translateY(-2px);box-shadow:0 8px 24px rgba(52,50,77,.35)}
+.paper{background:linear-gradient(160deg,#fbf8f3,#eee8ee);color:#3a3855;box-shadow:0 30px 80px rgba(0,0,0,.45),inset 0 0 40px rgba(201,204,214,.35)}
+.frame{border:1px solid #cfd1dc;outline:1px solid rgba(201,204,214,.8);outline-offset:-9px}
+@keyframes twinkle{0%,100%{opacity:.1;transform:scale(.6)}50%{opacity:1;transform:scale(1.2)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+@keyframes fall{0%{transform:translate(0,-10vh) rotate(0)}100%{transform:translate(60px,110vh) rotate(540deg)}}
+@keyframes ripple{0%{transform:scale(.3);opacity:.7}100%{transform:scale(1.6);opacity:0}}
+@keyframes neck{0%,100%{transform:rotate(-2.5deg)}50%{transform:rotate(3deg)}}
+@keyframes wing{0%,100%{transform:rotate(0)}50%{transform:rotate(-4deg) translateY(-2px)}}
+@keyframes shim{0%,100%{opacity:.55}50%{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const html = htm.bind(React.createElement);
+const {useState,useEffect,useMemo,useRef} = React;
+const {motion,AnimatePresence} = window.Motion;
+
+/* ✏️ EDIT YOUR DETAILS HERE */
+const CONFIG = {
+  name: "Rojin Sharifpour",
+  date: "۱۴۰۵/۹/۶",
+  time: "۶ عصر",
+  venue: "بلوار صفارزاده، کوچه صفارزاده ۳",
+  dress: "[Dress Code]",
+  host: "Rojin Sharifpour"
+};
+const rnd = (a,b)=>a+Math.random()*(b-a);
+
+/* ---------- Swan (SVG) ---------- */
+function Swan({size=380}){
+  return html`<svg width=${size} viewBox="0 0 300 220" style=${{overflow:'visible'}}>
+    <defs>
+      <linearGradient id="sw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#ece6ee"/><stop offset="1" stop-color="#b9b4c8"/></linearGradient>
+      <linearGradient id="bk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f0a77a"/><stop offset="1" stop-color="#d9784f"/></linearGradient>
+    </defs>
+    <path d="M14 138 Q4 106 52 104 Q120 94 192 110 Q222 120 208 152 Q180 190 110 190 Q42 190 14 138Z" fill="url(#sw)"/>
+    <g style=${{transformOrigin:'60px 130px',animation:'wing 4s ease-in-out infinite'}}>
+      <path d="M44 128 Q110 70 196 114 Q150 156 80 152Z" fill="#fff" opacity=".9"/>
+      <path d="M70 128 Q120 96 176 118 M62 140 Q115 112 170 128" stroke="#cfc8da" stroke-width="2" fill="none" opacity=".8"/>
+    </g>
+    <g style=${{transformOrigin:'188px 136px',animation:'neck 5s ease-in-out infinite'}}>
+      <path d="M186 138 C214 122 196 66 208 46 C218 32 236 40 240 52" stroke="url(#sw)" stroke-width="22" fill="none" stroke-linecap="round"/>
+      <ellipse cx="240" cy="50" rx="13" ry="10" fill="#fff"/>
+      <path d="M249 46 L274 56 L250 58Z" fill="url(#bk)"/>
+      <path d="M249 44 L254 40 L254 47Z" fill="#1c1c2b"/>
+      <circle cx="243" cy="47" r="2" fill="#1c1c2b"/>
+      <path d="M226 38 L228 24 L233 33 L238 22 L243 33 L248 24 L250 38Z" fill="#e5e7ee" stroke="#aeb2c4" stroke-width="1"/>
+      <circle cx="238" cy="22" r="2" fill="#fff"/>
+    </g>
+    <path d="M150 154 Q175 160 196 140" stroke="#fff" stroke-width="3" stroke-dasharray="1 7" stroke-linecap="round" fill="none"/>
+    ${[...Array(7)].map((_,i)=>html`<circle key=${i} cx=${150+i*7} cy=${154+Math.sin(i/1.5)*6-i*1.5} r="3.2" fill="#fff" stroke="#cfc8da" stroke-width=".6"/>`)}
+  </svg>`;
+}
+
+/* ---------- Atmosphere ---------- */
+function Sparkles({n=40}){
+  const items = useMemo(()=>[...Array(n)].map(()=>({l:rnd(0,100),t:rnd(0,95),s:rnd(2,5),d:rnd(0,5),du:rnd(2,5)})),[]);
+  return html`<div className="absolute inset-0 pointer-events-none">${items.map((p,i)=>html`<span key=${i} className="absolute rounded-full" style=${{left:p.l+'%',top:p.t+'%',width:p.s,height:p.s,background:'#fff',boxShadow:'0 0 8px 2px rgba(255,255,255,.7)',animation:`twinkle ${p.du}s ${p.d}s infinite`}}/>`)}</div>`;
+}
+function Pearls({n=14}){
+  const items = useMemo(()=>[...Array(n)].map(()=>({l:rnd(0,98),t:rnd(45,95),s:rnd(8,20),d:rnd(0,4),du:rnd(4,8)})),[]);
+  return html`<div className="absolute inset-0 pointer-events-none">${items.map((p,i)=>html`<span key=${i} className="pearl absolute" style=${{left:p.l+'%',top:p.t+'%',width:p.s,height:p.s,animation:`bob ${p.du}s ${p.d}s ease-in-out infinite`}}/>`)}</div>`;
+}
+function Petals({n=14}){
+  const items = useMemo(()=>[...Array(n)].map(()=>({l:rnd(0,100),s:rnd(10,20),d:rnd(0,12),du:rnd(12,22)})),[]);
+  return html`<div className="absolute inset-0 pointer-events-none overflow-hidden">${items.map((p,i)=>html`<span key=${i} className="absolute" style=${{left:p.l+'%',top:0,width:p.s,height:p.s*1.4,borderRadius:'60% 40% 60% 40%',background:'linear-gradient(135deg,#fff,#f3dfe3)',opacity:.8,animation:`fall ${p.du}s ${p.d}s linear infinite`}}/>`)}</div>`;
+}
+function Castle(){
+  return html`<svg viewBox="0 0 200 160" className="absolute" style=${{right:'4%',bottom:'41%',width:'clamp(110px,20vw,240px)',opacity:.75,filter:'drop-shadow(0 0 14px rgba(255,230,190,.6))'}}>
+    <path d="M10 160V110h18V86l8-14 8 14v24h14V70h8V40l9-24 9 24v30h8v40h14V92l8-14 8 14v18h20v50Z" fill="#3b3658"/>
+    ${[[36,95],[100,60],[100,90],[150,110]].map(([x,y],i)=>html`<rect key=${i} x=${x} y=${y} width="5" height="9" rx="2" fill="#ffe2a8"/>`)}
+  </svg>`;
+}
+function Background({blur=false}){
+  return html`<div className="absolute inset-0 overflow-hidden" style=${{filter:blur?'blur(3px) brightness(.8)':'none'}}>
+    <div className="sky absolute inset-0"/>
+    <${Castle}/>
+    <div className="lake absolute left-0 right-0 bottom-0" style=${{top:'60%'}}/>
+    <div className="sunpath absolute" style=${{left:'66%',top:'60%',width:60,height:'22%'}}/>
+    <${Sparkles}/><${Pearls}/><${Petals}/>
+  </div>`;
+}
+
+/* ---------- Loading ---------- */
+function Loading(){
+  return html`<motion.div className="absolute inset-0 flex flex-col items-center justify-center z-50" style=${{background:'radial-gradient(circle,#2a2a55,#0f1230)'}} exit=${{opacity:0}} transition=${{duration:1}}>
+    <div className="relative" style=${{width:110,height:110}}>
+      <div style=${{position:'absolute',inset:0,animation:'spin 4s linear infinite'}}>
+        ${[...Array(10)].map((_,i)=>html`<span key=${i} className="pearl absolute" style=${{width:12,height:12,left:49,top:0,transformOrigin:'6px 55px',transform:`rotate(${i*36}deg)`,opacity:.4+i/16}}/>`)}
+      </div>
+      <div className="absolute inset-0 flex items-center justify-center"><${Swan} size=${64}/></div>
+    </div>
+    <p className="script glow mt-6" style=${{fontSize:'2rem'}}>A little magic is arriving…</p>
+  </motion.div>`;
+}
+
+/* ---------- Scene 1: Lake ---------- */
+function LakeScene({onOpen}){
+  const [ready,setReady] = useState(false);
+  useEffect(()=>{const t=setTimeout(()=>setReady(true),600);return()=>clearTimeout(t)},[]);
+  return html`<motion.div className="absolute inset-0" exit=${{opacity:0,scale:1.08,filter:'blur(8px)'}} transition=${{duration:1.1}}>
+    <${Background}/>
+    <motion.div className="absolute left-0 right-0 text-center px-6" style=${{top:'9%',paddingTop:'env(safe-area-inset-top,0px)'}} initial=${{opacity:0,y:20}} animate=${{opacity:1,y:0}} transition=${{duration:2,delay:.4}}>
+      <p className="serif glow" style=${{letterSpacing:'.4em',fontSize:'clamp(.75rem,2.6vw,1rem)'}}>YOU’RE INVITED</p>
+      <h1 className="script glow" style=${{fontSize:'clamp(3.4rem,13vw,6.5rem)',lineHeight:1.1,margin:'.2rem 0'}}>My Birthday</h1>
+      <p style=${{color:'#e8d8ae'}}>♡</p>
+    </motion.div>
+    <motion.div className="absolute" style=${{bottom:'27%',left:0}} initial=${{x:'-70vw'}} animate=${{x:'min(34vw,300px)'}} transition=${{duration:5,ease:[.3,.1,.3,1]}}>
+      <div className="relative">
+        ${[0,1,2].map(i=>html`<span key=${i} className="absolute" style=${{left:'8%',bottom:-8,width:'85%',height:26,borderRadius:'50%',border:'1.5px solid rgba(255,255,255,.55)',animation:`ripple 3.6s ${i*1.2}s ease-out infinite`}}/>`)}
+        <div style=${{position:'absolute',top:'96%',left:0,transform:'scaleY(-1)',opacity:.22,filter:'blur(2.5px)',WebkitMaskImage:'linear-gradient(to top,#000,transparent 70%)',maskImage:'linear-gradient(to top,#000,transparent 70%)'}}><${Swan} size=${340}/></div>
+        <${Swan} size=${340}/>
+      </div>
+    </motion.div>
+    <div className="absolute left-0 right-0 flex justify-center" style=${{bottom:'8%',paddingBottom:'env(safe-area-inset-bottom,0px)'}}>
+      <${AnimatePresence}>${ready&&html`<motion.button key="b" className="btn btn-main" initial=${{opacity:0,y:20}} animate=${{opacity:1,y:0}} whileTap=${{scale:.96}} onClick=${onOpen}>Open the invitation →</motion.button>`}<//>
+    </div>
+  </motion.div>`;
+}
+
+/* ---------- Scene 2: Envelope ---------- */
+function Envelope({onDone}){
+  useEffect(()=>{const t=setTimeout(onDone,1500);return()=>clearTimeout(t)},[]);
+  return html`<motion.div className="absolute inset-0 flex items-center justify-center" initial=${{opacity:0}} animate=${{opacity:1}} exit=${{opacity:0,scale:1.15}} transition=${{duration:1}}>
+    <${Background} blur=${true}/>
+    <motion.div className="relative" style=${{width:'min(82vw,340px)',height:'min(55vw,226px)',perspective:1000}} initial=${{scale:.7,y:40}} animate=${{scale:[.7,1,1,1.12],y:[40,0,0,30]}} transition=${{duration:1.4,times:[0,.2,.8,1]}}>
+      <div className="absolute inset-0 rounded-md" style=${{background:'linear-gradient(135deg,#dcd6e6,#c6bfd6)',boxShadow:'0 30px 70px rgba(0,0,0,.5)'}}/>
+      <motion.div className="paper absolute rounded-md flex flex-col items-center justify-center" style=${{left:'6%',right:'6%',top:'6%',bottom:'6%',zIndex:1}} animate=${{y:[0,0,'-62%']}} transition=${{duration:.7,times:[0,.25,1],ease:'easeInOut'}}>
+        <p className="serif" style=${{letterSpacing:'.3em',fontSize:'.7rem'}}>MY BIRTHDAY</p>
+        <p className="script" style=${{fontSize:'2.6rem'}}>You’re Invited</p>
+      </motion.div>
+      <div className="absolute inset-0 rounded-md" style=${{zIndex:2,background:'linear-gradient(135deg,#faf6f0,#e4dde8)',clipPath:'polygon(0 0,50% 58%,100% 0,100% 100%,0 100%)'}}/>
+      <motion.div className="absolute left-0 right-0 top-0" style=${{height:'58%',transformOrigin:'top',zIndex:3,background:'linear-gradient(180deg,#f1ebf2,#d8d0e0)',clipPath:'polygon(0 0,100% 0,50% 100%)',backfaceVisibility:'hidden'}} animate=${{rotateX:180,zIndex:[3,3,0]}} transition=${{duration:.3,delay:.05}}/>
+      <motion.div className="pearl absolute" style=${{width:30,height:30,left:'calc(50% - 15px)',top:'48%',zIndex:4}} animate=${{opacity:0,scale:2}} transition=${{duration:.2,delay:0}}/>
+    </motion.div>
+  </motion.div>`;
+}
+
+/* ---------- Scene 3 & 4: Invitation + RSVP ---------- */
+const fade = (d=0)=>({initial:{opacity:0,y:30},whileInView:{opacity:1,y:0},viewport:{once:true,amount:.4},transition:{duration:1.1,delay:d}});
+function Bow(){
+  return html`<svg width="150" viewBox="0 0 120 56"><path d="M60 28C40 2 8 4 10 24c2 22 36 12 50 4ZM60 28C80 2 112 4 110 24c-2 22-36 12-50 4Z" fill="#dcdfe9" stroke="#aeb2c4" stroke-width="1.5"/><path d="M60 28L44 54M60 28L76 54" stroke="#c4c8d8" stroke-width="6" stroke-linecap="round"/><circle cx="60" cy="28" r="7" fill="#f3ecf3" stroke="#aeb2c4"/></svg>`;
+}
+const ICONS={
+  cal:html`<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4M8 14h2M12 14h2M8 17h2"/></svg>`,
+  clock:html`<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></svg>`,
+  pin:html`<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s6-5.5 6-11a6 6 0 10-12 0c0 5.5 6 11 6 11z"/><circle cx="12" cy="10" r="2.2"/></svg>`
+};
+function Detail({icon,label,value,d}){
+  return html`<motion.div ...${fade(d)} className="flex items-center gap-4 py-2"><span style=${{width:34,color:'#6d6a86',display:'flex',justifyContent:'center'}}>${ICONS[icon]}</span><div><p className="serif" style=${{fontSize:'1.1rem',color:'#3a3855',lineHeight:1.25}}>${label}</p><p className="serif" style=${{fontSize:'1.1rem',color:'#6d6a86',lineHeight:1.25}} dir="auto">${value}</p></div></motion.div>`;
+}
+const REPLIES = {
+  yes:{t:'Yay! See you there ♡',s:'Your presence means the world to me. Cannot wait to celebrate together!'},
+  maybe:{t:'I’ll keep a place for you',s:'Let me know when the stars align — a seat by the lake awaits.'},
+  no:{t:'You’ll be missed dearly',s:'Thank you for the love anyway. We’ll celebrate soon, I promise ♡'}
+};
+function Invite({onReplay}){
+  const [choice,setChoice] = useState(null);
+  const [hearts,setHearts] = useState([]);
+  const pick = (k)=>{
+    setChoice(k);
+    const sym = k==='no'?['✧','·']:['♡','✦','♥'];
+    const base = Date.now();
+    setHearts(h=>[...h,...[...Array(k==='no'?10:22)].map((_,i)=>({id:base+i,x:rnd(-45,45),dx:rnd(-90,90),s:rnd(16,34),c:sym[i%sym.length],d:rnd(0,.5)}))]);
+    setTimeout(()=>setHearts([]),3500);
+  };
+  return html`<motion.div className="absolute inset-0" initial=${{opacity:0}} animate=${{opacity:1}} transition=${{duration:1.4}}>
+    <${Background} blur=${true}/>
+    <div className="absolute inset-0 overflow-y-auto overflow-x-hidden" style=${{scrollSnapType:'y proximity',scrollBehavior:'smooth'}}>
+      <section className="min-h-full flex items-center justify-center px-5 py-16" style=${{scrollSnapAlign:'center'}}>
+        <motion.div className="paper frame relative text-center rounded-lg px-8 pt-20 pb-10" style=${{width:'min(92vw,430px)'}} initial=${{opacity:0,y:60,rotateX:25}} animate=${{opacity:1,y:0,rotateX:0}} transition=${{duration:1.6,ease:'easeOut'}}>
+          <div className="absolute left-1/2" style=${{top:-46,transform:'translateX(-50%)'}}><${Bow}/></div>
+          ${[...Array(14)].map((_,i)=>html`<span key=${i} className="pearl absolute" style=${{left:i<9?(-8+(i%2)*6):((8+(i-9)*20)+'%'),top:i<9?((6+i*10.5)+'%'):undefined,bottom:i<9?undefined:-8,width:12+(i%3)*6,height:12+(i%3)*6}}/>`)}
+          <div className="flex justify-center" style=${{filter:'brightness(.6) contrast(1.15)'}}><${Swan} size=${48}/></div>
+          <p className="serif mt-3" style=${{letterSpacing:'.35em',fontSize:'.75rem'}}>YOU’RE INVITED TO</p>
+          <h2 className="script" style=${{fontSize:'clamp(2.6rem,11vw,3.6rem)',lineHeight:1.1,color:'#34324d'}}>My Birthday</h2>
+          <p className="serif italic mt-3" style=${{fontSize:'1.15rem',color:'#4a4863'}}>Let’s celebrate another<br/>chapter of my story</p>
+          <p style=${{color:'#3a3855',margin:'.6rem 0 1.2rem'}}>♥</p>
+          <div className="text-left mx-auto" style=${{width:'fit-content'}}>
+            <${Detail} icon="cal" label="Date" value=${CONFIG.date} d=${.1}/>
+            <${Detail} icon="clock" label="Time" value=${CONFIG.time} d=${.3}/>
+            <${Detail} icon="pin" label="Location" value=${CONFIG.venue} d=${.5}/>
+          </div>
+          <p className="serif mt-6" style=${{fontSize:'1.05rem',color:'#4a4863'}}>Your presence means<br/>the world to me ♡</p>
+          <motion.p className="serif mt-5" style=${{letterSpacing:'.3em',fontSize:'.62rem',color:'#8a87a3'}} animate=${{y:[0,6,0]}} transition=${{repeat:Infinity,duration:2.2}}>RSVP ↓</motion.p>
+        </motion.div>
+      </section>
+
+      <section className="min-h-full flex flex-col items-center justify-center px-5 py-16 gap-8" style=${{scrollSnapAlign:'center'}}>
+        <div className="paper relative text-center rounded-3xl px-7 py-10" style=${{width:'min(92vw,400px)'}}>
+          <motion.h3 ...${fade()} className="script" style=${{fontSize:'2.8rem',position:'relative',zIndex:1}}>Will you be there?</motion.h3>
+          <p style=${{color:'#c1a46b'}}>♥</p>
+          <motion.div ...${fade(.2)} className="flex flex-col gap-3 mt-5" style=${{position:'relative',zIndex:1}}>
+            <button className="btn btn-dark" style=${{opacity:choice&&choice!=='yes'?.55:1}} onClick=${()=>pick('yes')}>Yes, I’ll be there ♡</button>
+            <button className="btn btn-ghost" style=${{opacity:choice&&choice!=='maybe'?.55:1}} onClick=${()=>pick('maybe')}>Maybe</button>
+            <button className="btn btn-ghost" style=${{opacity:choice&&choice!=='no'?.55:1}} onClick=${()=>pick('no')}>Unfortunately, I can’t</button>
+          </motion.div>
+          <${AnimatePresence} mode="wait">${choice&&html`<motion.div key=${choice} className="mt-7" style=${{position:'relative',zIndex:1}} initial=${{opacity:0,scale:.8,y:10}} animate=${{opacity:1,scale:1,y:0}} exit=${{opacity:0}} transition=${{type:'spring',stiffness:140,damping:14}}>
+            <p className="script" style=${{fontSize:'2rem',color:'#34324d'}}>${REPLIES[choice].t}</p>
+            <p className="serif italic" style=${{fontSize:'1.05rem'}}>${REPLIES[choice].s}</p>
+          </motion.div>`}<//>
+          <div className="absolute left-1/2 pointer-events-none" style=${{top:'46%',zIndex:0}}>
+            ${hearts.map(h=>html`<motion.span key=${h.id} className="absolute" style=${{left:h.x,fontSize:h.s,color:'#e9b8cb',textShadow:'0 0 12px #fff'}} initial=${{y:0,opacity:1,scale:.5}} animate=${{y:-300,x:h.dx,opacity:[1,.8,0],scale:1.2}} transition=${{duration:2.6,delay:h.d,ease:'easeOut'}}>${h.c}</motion.span>`)}
+          </div>
+        </div>
+        <button className="btn btn-main" onClick=${onReplay}>↻ Replay animation</button>
+        <p className="serif italic glow" style=${{opacity:.85}}>Your presence means the world to me ♡</p>
+      </section>
+    </div>
+  </motion.div>`;
+}
+
+/* ---------- Music (soft synthesized, user-controlled) ---------- */
+function useMusic(){
+  const ref = useRef({});
+  const [on,setOn] = useState(false);
+  const toggle = ()=>{
+    const r = ref.current;
+    if(!on){
+      const ctx = new (window.AudioContext||window.webkitAudioContext)();
+      const master = ctx.createGain(); master.gain.value=0; master.connect(ctx.destination);
+      master.gain.linearRampToValueAtTime(.16,ctx.currentTime+2);
+      const note=(f,t,len,v=.5)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.08);g.gain.exponentialRampToValueAtTime(.001,t+len);o.connect(g);g.connect(master);o.start(t);o.stop(t+len+.1)};
+      const mel=[493.88,587.33,739.99,659.25,587.33,554.37,587.33,493.88];
+      const play=()=>{const t=ctx.currentTime+.05;mel.forEach((f,i)=>{note(f,t+i*.6,1.6,.45);note(f*2,t+i*.6,.9,.08)});[123.47,185,246.94].forEach(f=>note(f,t,4.8,.35))};
+      play(); r.iv=setInterval(play,4800); r.ctx=ctx; setOn(true);
+    } else { clearInterval(r.iv); r.ctx&&r.ctx.close(); setOn(false); }
+  };
+  return [on,toggle];
+}
+
+/* ---------- App ---------- */
+function App(){
+  const [scene,setScene] = useState('loading');
+  const [run,setRun] = useState(0);
+  const [on,toggle] = useMusic();
+  useEffect(()=>{ if(scene==='loading'){const t=setTimeout(()=>setScene('lake'),2600);return()=>clearTimeout(t)} },[scene,run]);
+  const replay = ()=>{setRun(r=>r+1);setScene('loading')};
+  return html`<div className="fixed inset-0">
+    <${AnimatePresence} mode="wait">
+      ${scene==='loading'&&html`<${Loading} key=${'l'+run}/>`}
+      ${scene==='lake'&&html`<${LakeScene} key=${'k'+run} onOpen=${()=>setScene('envelope')}/>`}
+      ${scene==='envelope'&&html`<${Envelope} key="e" onDone=${()=>setScene('invite')}/>`}
+      ${scene==='invite'&&html`<${Invite} key="i" onReplay=${replay}/>`}
+    <//>
+    <button onClick=${toggle} aria-label="Toggle music" className="fixed z-50 serif" style=${{top:'calc(env(safe-area-inset-top,0px) + 14px)',right:14,padding:'.5rem .9rem',borderRadius:999,fontSize:'.75rem',letterSpacing:'.15em',background:'rgba(15,18,48,.55)',border:'1px solid rgba(255,255,255,.35)',color:'#f6f1ea',backdropFilter:'blur(6px)'}}>${on?'♪ MUSIC ON':'♪ MUSIC OFF'}</button>
+  </div>`;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(html`<${App}/>`);
+</script>
+</body>
+</html>
